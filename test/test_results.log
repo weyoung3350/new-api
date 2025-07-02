@@ -1,0 +1,28 @@
+2025-07-02 15:41:17,742 - INFO - 开始运行全部模型测试
+2025-07-02 15:41:17,742 - INFO - 开始测试 paraformer-realtime-8k-v2 语音识别功能
+2025-07-02 15:41:17,742 - WARNING - 未提供音频数据，使用空数据进行接口测试
+2025-07-02 15:41:17,742 - INFO - 发送请求: POST http://127.0.0.1:3000/v1/audio/transcriptions
+2025-07-02 15:41:17,763 - ERROR - 请求失败: 500 - {"error":{"message":"not implemented (request id: 202507021541177484545933Jbe97b8)","type":"new_api_error","param":"","code":"convert_request_failed"}}
+2025-07-02 15:41:17,763 - ERROR - 识别失败: {"error":{"message":"not implemented (request id: 202507021541177484545933Jbe97b8)","type":"new_api_error","param":"","code":"convert_request_failed"}}
+2025-07-02 15:41:17,763 - INFO - 开始测试 cosyvoice-v2 语音合成功能
+2025-07-02 15:41:17,763 - INFO - 发送请求: POST http://127.0.0.1:3000/v1/audio/speech
+2025-07-02 15:41:17,765 - ERROR - 请求失败: 503 - {"error":{"message":"当前分组 default 下对于模型 cosyvoice-v2 无可用渠道 (request id: 20250702154117764252802Hg81jeCQ)","type":"new_api_error"}}
+2025-07-02 15:41:17,765 - ERROR - 语音合成失败: {"error":{"message":"当前分组 default 下对于模型 cosyvoice-v2 无可用渠道 (request id: 20250702154117764252802Hg81jeCQ)","type":"new_api_error"}}
+2025-07-02 15:41:17,765 - INFO - 开始测试 text-embedding-v4 文本嵌入功能
+2025-07-02 15:41:17,765 - INFO - 发送请求: POST http://127.0.0.1:3000/v1/embeddings
+2025-07-02 15:41:18,879 - INFO - 嵌入生成成功，维度: 1024
+2025-07-02 15:41:18,879 - INFO - 测试报告已保存至: test_report_1751442078.json
+2025-07-02 15:45:43,680 - INFO - 开始运行全部模型测试
+2025-07-02 15:45:43,681 - INFO - 开始测试 paraformer-realtime-8k-v2 语音识别功能
+2025-07-02 15:45:43,681 - WARNING - 未提供音频数据，使用空数据进行接口测试
+2025-07-02 15:45:43,681 - INFO - 发送请求: POST http://127.0.0.1:3000/v1/realtime
+2025-07-02 15:45:43,689 - ERROR - 请求失败: 404 - {"error":{"message":"Invalid URL (POST /v1/realtime)","type":"invalid_request_error","param":"","code":""}}
+2025-07-02 15:45:43,689 - ERROR - 识别失败: {"error":{"message":"Invalid URL (POST /v1/realtime)","type":"invalid_request_error","param":"","code":""}}
+2025-07-02 15:45:43,689 - INFO - 开始测试 cosyvoice-v2 语音合成功能
+2025-07-02 15:45:43,689 - INFO - 发送请求: POST http://127.0.0.1:3000/v1/audio/speech
+2025-07-02 15:45:43,693 - ERROR - 请求失败: 503 - {"error":{"message":"当前分组 default 下对于模型 cosyvoice-v2 无可用渠道 (request id: 20250702154543690084258V74Stxxg)","type":"new_api_error"}}
+2025-07-02 15:45:43,693 - ERROR - 语音合成失败: {"error":{"message":"当前分组 default 下对于模型 cosyvoice-v2 无可用渠道 (request id: 20250702154543690084258V74Stxxg)","type":"new_api_error"}}
+2025-07-02 15:45:43,693 - INFO - 开始测试 text-embedding-v4 文本嵌入功能
+2025-07-02 15:45:43,693 - INFO - 发送请求: POST http://127.0.0.1:3000/v1/embeddings
+2025-07-02 15:45:44,951 - INFO - 嵌入生成成功，维度: 1024
+2025-07-02 15:45:44,953 - INFO - 测试报告已保存至: test_report_1751442344.json

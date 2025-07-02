@@ -2,7 +2,6 @@ package controller
 
 import (
 	"fmt"
-	"github.com/samber/lo"
 	"net/http"
 	"one-api/common"
 	"one-api/constant"
@@ -10,12 +9,15 @@ import (
 	"one-api/model"
 	"one-api/relay"
 	"one-api/relay/channel/ai360"
+	"one-api/relay/channel/ali"
 	"one-api/relay/channel/lingyiwanwu"
 	"one-api/relay/channel/minimax"
 	"one-api/relay/channel/moonshot"
 	relaycommon "one-api/relay/common"
 	relayconstant "one-api/relay/constant"
 	"one-api/setting"
+
+	"github.com/samber/lo"
 
 	"github.com/gin-gonic/gin"
 )
@@ -106,6 +108,17 @@ func init() {
 			Object:     "model",
 			Created:    1626777600,
 			OwnedBy:    minimax.ChannelName,
+			Permission: permission,
+			Root:       modelName,
+			Parent:     nil,
+		})
+	}
+	for _, modelName := range ali.ModelList {
+		openAIModels = append(openAIModels, dto.OpenAIModels{
+			Id:         modelName,
+			Object:     "model",
+			Created:    1626777600,
+			OwnedBy:    ali.ChannelName,
 			Permission: permission,
 			Root:       modelName,
 			Parent:     nil,

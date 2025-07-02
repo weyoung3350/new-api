@@ -3,10 +3,12 @@ package ali
 import (
 	"bufio"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"one-api/common"
 	"one-api/dto"
+	relaycommon "one-api/relay/common"
 	"one-api/relay/helper"
 	"one-api/service"
 	"strings"
@@ -79,7 +81,10 @@ func embeddingResponseAli2OpenAI(response *AliEmbeddingResponse, model string) *
 		Object: "list",
 		Data:   make([]dto.OpenAIEmbeddingResponseItem, 0, len(response.Output.Embeddings)),
 		Model:  model,
-		Usage:  dto.Usage{TotalTokens: response.Usage.TotalTokens},
+		Usage: dto.Usage{
+			PromptTokens: response.Usage.TotalTokens,
+			TotalTokens:  response.Usage.TotalTokens,
+		},
 	}
 
 	for _, item := range response.Output.Embeddings {
@@ -220,41 +225,13 @@ func aliHandler(c *gin.Context, resp *http.Response) (*dto.OpenAIErrorWithStatus
 	return nil, &fullTextResponse.Usage
 }
 
-// 音频请求转换：OpenAI格式 -> 阿里云格式
-func audioRequestOpenAI2Ali(request dto.AudioRequest) *AliAudioRequest {
-	aliRequest := &AliAudioRequest{
-		Model: request.Model,
-		Input: struct {
-			Text string `json:"text"`
-		}{
-			Text: request.Input,
-		},
-	}
+// 统一音频处理器 - 所有音频请求都使用WebSocket API
+func UnifiedAudioHandler(c *gin.Context, info *relaycommon.RelayInfo, request dto.AudioRequest) (*dto.OpenAIErrorWithStatusCode, *dto.Usage) {
+	common.LogInfo(c, fmt.Sprintf("处理音频请求，模型: %s, 文本长度: %d 字符, 声音: %s",
+		request.Model, len([]rune(request.Input)), request.Voice))
 
-	// 设置音频参数
-	aliRequest.Parameters.Speed = request.Speed
-	if request.Voice != "" {
-		aliRequest.Parameters.Voice = request.Voice
-	}
-
-	// 设置音频格式
-	switch request.ResponseFormat {
-	case "mp3":
-		aliRequest.Parameters.Format = "mp3"
-	case "opus":
-		aliRequest.Parameters.Format = "opus"
-	case "aac":
-		aliRequest.Parameters.Format = "aac"
-	case "flac":
-		aliRequest.Parameters.Format = "flac"
-	default:
-		aliRequest.Parameters.Format = "mp3" // 默认mp3格式
-	}
-
-	// 设置默认采样率
-	aliRequest.Parameters.SampleRate = 16000
-
-	return aliRequest
+	// 所有音频请求都通过WebSocket API处理
+	return HandleCosyVoiceWebSocketTTS(c, info, request)
 }
 
 // 阿里云音频响应处理

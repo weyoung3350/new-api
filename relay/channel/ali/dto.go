@@ -1,6 +1,10 @@
 package ali
 
-import "one-api/dto"
+import (
+	"one-api/dto"
+
+	"github.com/gorilla/websocket"
+)
 
 type AliMessage struct {
 	Content string `json:"content"`
@@ -140,6 +144,25 @@ type AliAudioRequest struct {
 		SampleRate int     `json:"sample_rate,omitempty"`
 		Speed      float64 `json:"speed,omitempty"`
 	} `json:"parameters,omitempty"`
+	Task string `json:"task,omitempty"` // 部分模型需要的task参数，设为可选
+}
+
+// 专门为cosyvoice-v2模型的音频请求结构（不包含task字段）
+type AliCosyVoiceRequest struct {
+	Model string `json:"model"`
+	Input struct {
+		Text string `json:"text"`
+	} `json:"input"`
+	Parameters struct {
+		Voice      string  `json:"voice,omitempty"`
+		Rate       string  `json:"rate,omitempty"`
+		Pitch      string  `json:"pitch,omitempty"`
+		Volume     string  `json:"volume,omitempty"`
+		Format     string  `json:"format,omitempty"`
+		SampleRate int     `json:"sample_rate,omitempty"`
+		Speed      float64 `json:"speed,omitempty"`
+	} `json:"parameters,omitempty"`
+	// 注意：cosyvoice-v2不需要task字段
 }
 
 // 阿里云音频响应结构
@@ -198,4 +221,112 @@ type AliRealtimeASRSession struct {
 	EnableITN          bool   `json:"enable_itn"`
 	EnableWordsLevel   bool   `json:"enable_words_level"`
 	MaxSentenceSilence int    `json:"max_sentence_silence"`
+}
+
+// CosyVoice WebSocket API 相关结构定义（按照官方格式）
+
+// WebSocket指令类型常量
+const (
+	CosyVoiceWSCommandRunTask      = "run-task"
+	CosyVoiceWSCommandContinueTask = "continue-task"
+	CosyVoiceWSCommandFinishTask   = "finish-task"
+)
+
+// WebSocket事件类型常量
+const (
+	CosyVoiceWSEventTaskStarted     = "task-started"
+	CosyVoiceWSEventResultGenerated = "result-generated"
+	CosyVoiceWSEventTaskFinished    = "task-finished"
+	CosyVoiceWSEventTaskFailed      = "task-failed"
+)
+
+// 官方格式的Header结构
+type CosyVoiceWSHeader struct {
+	Action       string                 `json:"action"`
+	TaskID       string                 `json:"task_id"`
+	Streaming    string                 `json:"streaming"`
+	Event        string                 `json:"event,omitempty"`
+	ErrorCode    string                 `json:"error_code,omitempty"`
+	ErrorMessage string                 `json:"error_message,omitempty"`
+	Attributes   map[string]interface{} `json:"attributes,omitempty"`
+}
+
+// 官方格式的Parameters结构
+type CosyVoiceWSParams struct {
+	TextType   string `json:"text_type"`
+	Voice      string `json:"voice"`
+	Format     string `json:"format"`
+	SampleRate int    `json:"sample_rate"`
+	Volume     int    `json:"volume"`
+	Rate       int    `json:"rate"`
+	Pitch      int    `json:"pitch"`
+}
+
+// 官方格式的Input结构
+type CosyVoiceWSInput struct {
+	Text string `json:"text"`
+}
+
+// 官方格式的Payload结构
+type CosyVoiceWSPayload struct {
+	TaskGroup  string            `json:"task_group,omitempty"`
+	Task       string            `json:"task,omitempty"`
+	Function   string            `json:"function,omitempty"`
+	Model      string            `json:"model,omitempty"`
+	Parameters CosyVoiceWSParams `json:"parameters,omitempty"`
+	Input      CosyVoiceWSInput  `json:"input"`
+}
+
+// 官方格式的完整事件结构
+type CosyVoiceWSEvent struct {
+	Header  CosyVoiceWSHeader  `json:"header"`
+	Payload CosyVoiceWSPayload `json:"payload"`
+}
+
+// CosyVoice WebSocket 响应基础结构（使用相同的格式）
+type CosyVoiceWSResponse struct {
+	Header  CosyVoiceWSHeader  `json:"header"`
+	Payload CosyVoiceWSPayload `json:"payload"`
+}
+
+// task-started 事件的负载结构
+type CosyVoiceTaskStartedPayload struct {
+	TaskId string `json:"task_id"`
+}
+
+// result-generated 事件的负载结构
+type CosyVoiceResultGeneratedPayload struct {
+	Audio    string `json:"audio"`     // base64编码的音频数据
+	AudioUrl string `json:"audio_url"` // 音频URL（如果有）
+	Subtask  string `json:"subtask"`   // 子任务信息
+	Sentence string `json:"sentence"`  // 对应的文本句子
+}
+
+// task-finished 事件的负载结构
+type CosyVoiceTaskFinishedPayload struct {
+	TaskId string `json:"task_id"`
+	Usage  struct {
+		Characters int `json:"characters"` // 字符数
+	} `json:"usage"`
+}
+
+// task-failed 事件的负载结构
+type CosyVoiceTaskFailedPayload struct {
+	TaskId    string `json:"task_id"`
+	ErrorCode string `json:"error_code"`
+	ErrorMsg  string `json:"error_message"`
+}
+
+// CosyVoice WebSocket 会话配置
+type CosyVoiceWSSession struct {
+	TaskId     string          `json:"task_id"`
+	Model      string          `json:"model"`
+	Voice      string          `json:"voice"`
+	Format     string          `json:"format"`
+	SampleRate int             `json:"sample_rate"`
+	EnableSSML bool            `json:"enable_ssml"`
+	Connection *websocket.Conn `json:"-"` // WebSocket连接，不序列化
+	AudioChan  chan []byte     `json:"-"` // 音频数据通道
+	ErrorChan  chan error      `json:"-"` // 错误通道
+	DoneChan   chan bool       `json:"-"` // 完成信号通道
 }

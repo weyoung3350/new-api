@@ -1,0 +1,78 @@
+{
+  "test_summary": {
+    "total_tests": 3,
+    "successful_tests": 1,
+    "failed_tests": 2,
+    "success_rate": "33.3%"
+  },
+  "test_results": [
+    {
+      "success": false,
+      "status_code": 404,
+      "response_time": 0.01,
+      "model": "paraformer-realtime-8k-v2",
+      "error": "{\"error\":{\"message\":\"Invalid URL (POST /v1/realtime)\",\"type\":\"invalid_request_error\",\"param\":\"\",\"code\":\"\"}}"
+    },
+    {
+      "success": false,
+      "status_code": 503,
+      "response_time": 0.0,
+      "model": "cosyvoice-v2",
+      "input_text": "欢迎使用New API平台，这是一个语音合成测试。",
+      "voice": "zh-CN-XiaoxiaoNeural",
+      "error": "{\"error\":{\"message\":\"当前分组 default 下对于模型 cosyvoice-v2 无可用渠道 (request id: 20250702154543690084258V74Stxxg)\",\"type\":\"new_api_error\"}}"
+    },
+    {
+      "success": true,
+      "status_code": 200,
+      "response_time": 1.26,
+      "model": "text-embedding-v4",
+      "input_count": 3,
+      "embedding_count": 3,
+      "embedding_dimension": 1024,
+      "usage": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "total_tokens": 23,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "text_tokens": 0,
+          "audio_tokens": 0,
+          "image_tokens": 0
+        },
+        "completion_tokens_details": {
+          "text_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0
+        },
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "input_tokens_details": null
+      },
+      "embeddings_preview": {
+        "text_0": [
+          -0.02677261270582676,
+          0.0603693388402462,
+          0.018844181671738625,
+          0.04720247909426689,
+          -0.012338620610535145
+        ],
+        "text_1": [
+          -0.000653374707326293,
+          0.07946725189685822,
+          0.04887911304831505,
+          0.0471062958240509,
+          0.01824876479804516
+        ],
+        "text_2": [
+          -0.03480793163180351,
+          0.02597627229988575,
+          -0.03027607500553131,
+          0.03368861973285675,
+          -0.032460104674100876
+        ]
+      }
+    }
+  ],
+  "test_time": "2025-07-02 15:45:44"
+}
