@@ -8,6 +8,9 @@ var ModelList = []string{
 	"qwq-32b",
 	"qwen3-235b-a22b",
 	"text-embedding-v1",
+	"text-embedding-v4",
+	"cosyvoice-v2",
+	"paraformer-realtime-8k-v2",
 	"gte-rerank-v2",
 }
 

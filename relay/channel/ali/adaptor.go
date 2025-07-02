@@ -1,6 +1,8 @@
 package ali
 
 import (
+	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -35,6 +37,13 @@ func (a *Adaptor) GetRequestURL(info *relaycommon.RelayInfo) (string, error) {
 		fullRequestURL = fmt.Sprintf("%s/api/v1/services/rerank/text-rerank/text-rerank", info.BaseUrl)
 	case constant.RelayModeImagesGenerations:
 		fullRequestURL = fmt.Sprintf("%s/api/v1/services/aigc/text2image/image-synthesis", info.BaseUrl)
+	case constant.RelayModeAudioSpeech:
+		fullRequestURL = fmt.Sprintf("%s/api/v1/services/audio/tts", info.BaseUrl)
+	case constant.RelayModeAudioTranscription:
+		fullRequestURL = fmt.Sprintf("%s/api/v1/services/audio/transcription", info.BaseUrl)
+	case constant.RelayModeRealtime:
+		// 阿里云实时语音识别WebSocket端点
+		fullRequestURL = fmt.Sprintf("wss://nls-ws.cn-shanghai.aliyuncs.com/ws/v1", info.BaseUrl)
 	case constant.RelayModeCompletions:
 		fullRequestURL = fmt.Sprintf("%s/compatible-mode/v1/completions", info.BaseUrl)
 	default:
@@ -86,8 +95,12 @@ func (a *Adaptor) ConvertEmbeddingRequest(c *gin.Context, info *relaycommon.Rela
 }
 
 func (a *Adaptor) ConvertAudioRequest(c *gin.Context, info *relaycommon.RelayInfo, request dto.AudioRequest) (io.Reader, error) {
-	//TODO implement me
-	return nil, errors.New("not implemented")
+	aliRequest := audioRequestOpenAI2Ali(request)
+	jsonData, err := json.Marshal(aliRequest)
+	if err != nil {
+		return nil, fmt.Errorf("marshal audio request failed: %w", err)
+	}
+	return bytes.NewBuffer(jsonData), nil
 }
 
 func (a *Adaptor) ConvertOpenAIResponsesRequest(c *gin.Context, info *relaycommon.RelayInfo, request dto.OpenAIResponsesRequest) (any, error) {
@@ -107,6 +120,12 @@ func (a *Adaptor) DoResponse(c *gin.Context, resp *http.Response, info *relaycom
 		err, usage = aliEmbeddingHandler(c, resp)
 	case constant.RelayModeRerank:
 		err, usage = RerankHandler(c, resp, info)
+	case constant.RelayModeAudioSpeech:
+		err, usage = aliAudioHandler(c, resp)
+	case constant.RelayModeAudioTranscription:
+		err, usage = aliAudioHandler(c, resp)
+	case constant.RelayModeRealtime:
+		err, usage = aliRealtimeASRHandler(c, resp)
 	default:
 		if info.IsStream {
 			err, usage = openai.OaiStreamHandler(c, resp, info)

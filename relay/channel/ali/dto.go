@@ -124,3 +124,78 @@ type AliRerankResponse struct {
 	RequestId string   `json:"request_id"`
 	AliError
 }
+
+// 阿里云TTS音频请求结构
+type AliAudioRequest struct {
+	Model string `json:"model"`
+	Input struct {
+		Text string `json:"text"`
+	} `json:"input"`
+	Parameters struct {
+		Voice      string  `json:"voice,omitempty"`
+		Rate       string  `json:"rate,omitempty"`
+		Pitch      string  `json:"pitch,omitempty"`
+		Volume     string  `json:"volume,omitempty"`
+		Format     string  `json:"format,omitempty"`
+		SampleRate int     `json:"sample_rate,omitempty"`
+		Speed      float64 `json:"speed,omitempty"`
+	} `json:"parameters,omitempty"`
+}
+
+// 阿里云音频响应结构
+type AliAudioResponse struct {
+	Output struct {
+		AudioUrl  string `json:"audio_url,omitempty"`
+		AudioData string `json:"audio_data,omitempty"` // base64编码的音频数据
+	} `json:"output"`
+	Usage     AliUsage `json:"usage"`
+	RequestId string   `json:"request_id"`
+	AliError
+}
+
+// 阿里云实时语音识别WebSocket请求结构
+type AliRealtimeASRRequest struct {
+	Header struct {
+		MessageId string `json:"message_id"`
+		TaskId    string `json:"task_id"`
+		Namespace string `json:"namespace"`
+		Name      string `json:"name"`
+		AppKey    string `json:"appkey"`
+		Token     string `json:"token"`
+	} `json:"header"`
+	Payload struct {
+		Model      string `json:"model"`
+		SampleRate int    `json:"sample_rate"`
+		Format     string `json:"format"`
+		AudioData  string `json:"audio_data"` // base64编码的音频数据
+	} `json:"payload"`
+}
+
+// 阿里云实时语音识别WebSocket响应结构
+type AliRealtimeASRResponse struct {
+	Header struct {
+		MessageId  string `json:"message_id"`
+		TaskId     string `json:"task_id"`
+		Namespace  string `json:"namespace"`
+		Name       string `json:"name"`
+		Status     int    `json:"status"`
+		StatusText string `json:"status_text"`
+	} `json:"header"`
+	Payload struct {
+		Result string `json:"result"`
+		Time   int64  `json:"time"`
+		Index  int    `json:"index"`
+		IsEnd  bool   `json:"is_end"`
+	} `json:"payload"`
+}
+
+// 阿里云实时语音识别会话配置
+type AliRealtimeASRSession struct {
+	Model              string `json:"model"`
+	SampleRate         int    `json:"sample_rate"`
+	Format             string `json:"format"`
+	EnablePunctuate    bool   `json:"enable_punctuate"`
+	EnableITN          bool   `json:"enable_itn"`
+	EnableWordsLevel   bool   `json:"enable_words_level"`
+	MaxSentenceSilence int    `json:"max_sentence_silence"`
+}

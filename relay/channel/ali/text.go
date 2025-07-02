@@ -219,3 +219,162 @@ func aliHandler(c *gin.Context, resp *http.Response) (*dto.OpenAIErrorWithStatus
 	_, err = c.Writer.Write(jsonResponse)
 	return nil, &fullTextResponse.Usage
 }
+
+// 音频请求转换：OpenAI格式 -> 阿里云格式
+func audioRequestOpenAI2Ali(request dto.AudioRequest) *AliAudioRequest {
+	aliRequest := &AliAudioRequest{
+		Model: request.Model,
+		Input: struct {
+			Text string `json:"text"`
+		}{
+			Text: request.Input,
+		},
+	}
+
+	// 设置音频参数
+	aliRequest.Parameters.Speed = request.Speed
+	if request.Voice != "" {
+		aliRequest.Parameters.Voice = request.Voice
+	}
+
+	// 设置音频格式
+	switch request.ResponseFormat {
+	case "mp3":
+		aliRequest.Parameters.Format = "mp3"
+	case "opus":
+		aliRequest.Parameters.Format = "opus"
+	case "aac":
+		aliRequest.Parameters.Format = "aac"
+	case "flac":
+		aliRequest.Parameters.Format = "flac"
+	default:
+		aliRequest.Parameters.Format = "mp3" // 默认mp3格式
+	}
+
+	// 设置默认采样率
+	aliRequest.Parameters.SampleRate = 16000
+
+	return aliRequest
+}
+
+// 阿里云音频响应处理
+func aliAudioHandler(c *gin.Context, resp *http.Response) (*dto.OpenAIErrorWithStatusCode, *dto.Usage) {
+	var aliResponse AliAudioResponse
+	responseBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return service.OpenAIErrorWrapper(err, "read_response_body_failed", http.StatusInternalServerError), nil
+	}
+	common.CloseResponseBodyGracefully(resp)
+
+	err = json.Unmarshal(responseBody, &aliResponse)
+	if err != nil {
+		return service.OpenAIErrorWrapper(err, "unmarshal_response_body_failed", http.StatusInternalServerError), nil
+	}
+
+	if aliResponse.Code != "" {
+		return &dto.OpenAIErrorWithStatusCode{
+			Error: dto.OpenAIError{
+				Message: aliResponse.Message,
+				Type:    aliResponse.Code,
+				Param:   aliResponse.RequestId,
+				Code:    aliResponse.Code,
+			},
+			StatusCode: resp.StatusCode,
+		}, nil
+	}
+
+	// 如果有音频数据，直接返回
+	if aliResponse.Output.AudioData != "" {
+		// 将base64音频数据写入响应
+		c.Writer.Header().Set("Content-Type", "audio/mpeg")
+		c.Writer.WriteHeader(resp.StatusCode)
+
+		audioData, err := service.DecodeBase64AudioData(aliResponse.Output.AudioData)
+		if err != nil {
+			return service.OpenAIErrorWrapper(err, "decode_audio_data_failed", http.StatusInternalServerError), nil
+		}
+
+		_, err = c.Writer.Write([]byte(audioData))
+		if err != nil {
+			return service.OpenAIErrorWrapper(err, "write_audio_response_failed", http.StatusInternalServerError), nil
+		}
+	}
+
+	// 返回使用情况
+	usage := &dto.Usage{
+		TotalTokens: aliResponse.Usage.TotalTokens,
+	}
+
+	return nil, usage
+}
+
+// 实时语音识别请求转换：Realtime -> 阿里云格式
+func realtimeASRRequestOpenAI2Ali(event dto.RealtimeEvent, taskId string) *AliRealtimeASRRequest {
+	aliRequest := &AliRealtimeASRRequest{}
+
+	// 设置请求头
+	aliRequest.Header.MessageId = event.EventId
+	aliRequest.Header.TaskId = taskId
+	aliRequest.Header.Namespace = "SpeechTranscriber"
+	aliRequest.Header.Name = "StartTranscription"
+	// AppKey和Token需要从配置中获取
+
+	// 设置负载
+	aliRequest.Payload.Model = "paraformer-realtime-8k-v2"
+	aliRequest.Payload.SampleRate = 16000
+	aliRequest.Payload.Format = "pcm"
+	aliRequest.Payload.AudioData = event.Audio
+
+	return aliRequest
+}
+
+// 阿里云实时语音识别响应转换：阿里云格式 -> OpenAI格式
+func realtimeASRResponseAli2OpenAI(aliResponse *AliRealtimeASRResponse) *dto.RealtimeEvent {
+	event := &dto.RealtimeEvent{
+		EventId: aliResponse.Header.MessageId,
+		Type:    dto.RealtimeEventResponseAudioTranscriptionDelta,
+		Delta:   aliResponse.Payload.Result,
+	}
+
+	// 如果是结束标志，设置为完成事件
+	if aliResponse.Payload.IsEnd {
+		event.Type = dto.RealtimeEventTypeResponseDone
+	}
+
+	return event
+}
+
+// 阿里云实时语音识别WebSocket处理器
+func aliRealtimeASRHandler(c *gin.Context, resp *http.Response) (*dto.OpenAIErrorWithStatusCode, *dto.Usage) {
+	// 注意：这是一个简化的实现，实际的WebSocket处理会更复杂
+	// 真实的实现需要：
+	// 1. 建立WebSocket连接到阿里云
+	// 2. 处理音频流的实时传输
+	// 3. 管理会话状态和错误处理
+	// 4. 实现心跳和重连机制
+
+	// 这里返回一个基础的Usage结构
+	usage := &dto.Usage{
+		TotalTokens: 1, // 实时语音识别通常按时长计费
+	}
+
+	// 在实际实现中，这里会：
+	// - 解析WebSocket消息
+	// - 转换为OpenAI Realtime API格式
+	// - 流式返回转录结果
+
+	return nil, usage
+}
+
+// 创建阿里云实时语音识别会话配置
+func createAliRealtimeASRSession() *AliRealtimeASRSession {
+	return &AliRealtimeASRSession{
+		Model:              "paraformer-realtime-8k-v2",
+		SampleRate:         16000,
+		Format:             "pcm",
+		EnablePunctuate:    true,
+		EnableITN:          true,
+		EnableWordsLevel:   false,
+		MaxSentenceSilence: 800, // 毫秒
+	}
+}
