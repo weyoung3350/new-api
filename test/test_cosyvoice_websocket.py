@@ -108,59 +108,6 @@ def test_long_text_tts():
     except Exception as e:
         print(f"   ❌ 异常: {str(e)}")
 
-def test_ssml_tts():
-    """测试SSML标记TTS（使用WebSocket API，但CosyVoice暂不支持SSML）"""
-    print("\n🔍 测试SSML标记TTS...")
-    
-    url = f"{BASE_URL}/v1/audio/speech"
-    headers = {
-        "Authorization": f"Bearer {API_KEY}",
-        "Content-Type": "application/json"
-    }
-    
-    ssml_text = """
-    <speak>
-        <voice name="longyingcui">
-            欢迎使用<emphasis level="strong">CosyVoice</emphasis>语音合成服务！
-            <break time="500ms"/>
-            这是一个<prosody rate="slow">慢速</prosody>的示例。
-            <break time="1s"/>
-            现在是<prosody rate="fast">快速</prosody>的示例。
-        </voice>
-    </speak>
-    """
-    
-    data = {
-        "model": "cosyvoice-v2",
-        "input": ssml_text.strip(),
-        "voice": "longyingcui",
-        "response_format": "mp3",
-        "speed": 1.0
-    }
-    
-    try:
-        print(f"   SSML文本: {data['input'][:100]}...")
-        start_time = time.time()
-        response = requests.post(url, headers=headers, json=data, timeout=120)
-        end_time = time.time()
-        
-        print(f"   状态码: {response.status_code}")
-        print(f"   响应时间: {end_time - start_time:.2f}秒")
-        
-        if response.status_code == 200:
-            audio_size = len(response.content)
-            print(f"   ✅ 成功！音频大小: {audio_size} 字节")
-            
-            # 保存音频文件
-            output_file = f"test_ssml_{int(time.time())}.mp3"
-            with open(output_file, "wb") as f:
-                f.write(response.content)
-            print(f"   音频保存至: {output_file}")
-        else:
-            print(f"   ❌ 失败: {response.text}")
-            
-    except Exception as e:
-        print(f"   ❌ 异常: {str(e)}")
 
 def test_different_voices():
     """测试不同声音"""
@@ -221,7 +168,6 @@ def main():
     # 运行各种测试
     test_short_text_tts()
     test_long_text_tts()
-    test_ssml_tts()
     test_different_voices()
     
     print("\n" + "=" * 60)
