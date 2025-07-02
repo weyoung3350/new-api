@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New-API Realtime WebSocket 测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .controls {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        .controls input, .controls button, .controls select {
+            margin: 5px;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .controls button {
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        .controls button:hover {
+            background: #0056b3;
+        }
+        .controls button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .status.connected {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.disconnected {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .logs {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background: #f8f9fa;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .log-entry {
+            margin: 2px 0;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        .log-sent {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+        .log-received {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+        .log-error {
+            background: #ffebee;
+            color: #c62828;
+        }
+        .log-info {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+        .audio-controls {
+            margin: 15px 0;
+            padding: 15px;
+            background: #fff3cd;
+            border-radius: 5px;
+        }
+        .events-panel {
+            margin-top: 20px;
+        }
+        .event-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .event-button {
+            padding: 10px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .event-button:hover {
+            background: #218838;
+        }
+        .event-button:disabled {
+            background: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎙️ New-API Realtime WebSocket 测试客户端</h1>
+        
+        <div class="controls">
+            <label>服务器地址:</label>
+            <input type="text" id="serverUrl" value="ws://localhost:3000/v1/realtime?model=cosyvoice-v2" style="width: 400px;">
+            
+            <label>API Key:</label>
+            <input type="text" id="apiKey" placeholder="sk-xxx" style="width: 300px;">
+            
+            <button id="connectBtn" onclick="connect()">连接</button>
+            <button id="disconnectBtn" onclick="disconnect()" disabled>断开连接</button>
+            <button onclick="clearLogs()">清空日志</button>
+        </div>
+
+        <div id="status" class="status disconnected">未连接</div>
+
+        <div class="audio-controls">
+            <h3>🎵 音频控制</h3>
+            <button onclick="startRecording()" id="recordBtn">开始录音</button>
+            <button onclick="stopRecording()" id="stopBtn" disabled>停止录音</button>
+            <button onclick="commitAudio()">提交音频</button>
+            <button onclick="clearAudioBuffer()">清空音频缓冲区</button>
+        </div>
+
+        <div class="events-panel">
+            <h3>📡 事件测试</h3>
+            <div class="event-buttons">
+                <button class="event-button" onclick="updateSession()">更新会话</button>
+                <button class="event-button" onclick="createTextMessage()">创建文本消息</button>
+                <button class="event-button" onclick="createResponse()">创建响应</button>
+                <button class="event-button" onclick="cancelResponse()">取消响应</button>
+            </div>
+        </div>
+
+        <div>
+            <h3>📋 事件日志</h3>
+            <div id="logs" class="logs"></div>
+        </div>
+    </div>
+
+    <script>
+        let ws = null;
+        let isRecording = false;
+        let mediaRecorder = null;
+        let audioChunks = [];
+
+        function log(message, type = 'info') {
+            const logs = document.getElementById('logs');
+            const entry = document.createElement('div');
+            entry.className = `log-entry log-${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logs.appendChild(entry);
+            logs.scrollTop = logs.scrollHeight;
+        }
+
+        function updateStatus(connected) {
+            const status = document.getElementById('status');
+            const connectBtn = document.getElementById('connectBtn');
+            const disconnectBtn = document.getElementById('disconnectBtn');
+            
+            if (connected) {
+                status.textContent = '已连接到 Realtime API';
+                status.className = 'status connected';
+                connectBtn.disabled = true;
+                disconnectBtn.disabled = false;
+            } else {
+                status.textContent = '未连接';
+                status.className = 'status disconnected';
+                connectBtn.disabled = false;
+                disconnectBtn.disabled = true;
+            }
+        }
+
+        function connect() {
+            const serverUrl = document.getElementById('serverUrl').value;
+            const apiKey = document.getElementById('apiKey').value;
+
+            if (!apiKey) {
+                alert('请输入API Key');
+                return;
+            }
+
+            try {
+                // 创建WebSocket连接，添加Authorization头
+                ws = new WebSocket(serverUrl, ['realtime']);
+                
+                // 注意：WebSocket无法直接设置Authorization头
+                // 需要通过查询参数或其他方式传递token
+                log('正在连接到 ' + serverUrl, 'info');
+
+                ws.onopen = function(event) {
+                    log('WebSocket连接已建立', 'info');
+                    updateStatus(true);
+                };
+
+                ws.onmessage = function(event) {
+                    const data = JSON.parse(event.data);
+                    log('收到服务器事件: ' + JSON.stringify(data, null, 2), 'received');
+                    
+                    // 处理特定事件
+                    if (data.type === 'session.created') {
+                        log('会话已创建: ' + data.session.id, 'info');
+                    } else if (data.type === 'error') {
+                        log('服务器错误: ' + data.error.message, 'error');
+                    }
+                };
+
+                ws.onclose = function(event) {
+                    log('WebSocket连接已关闭: ' + event.code + ' - ' + event.reason, 'info');
+                    updateStatus(false);
+                };
+
+                ws.onerror = function(error) {
+                    log('WebSocket错误: ' + error, 'error');
+                    updateStatus(false);
+                };
+
+            } catch (error) {
+                log('连接失败: ' + error.message, 'error');
+            }
+        }
+
+        function disconnect() {
+            if (ws) {
+                ws.close();
+                ws = null;
+            }
+        }
+
+        function sendEvent(event) {
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                log('WebSocket未连接', 'error');
+                return;
+            }
+
+            const message = JSON.stringify(event);
+            ws.send(message);
+            log('发送事件: ' + message, 'sent');
+        }
+
+        function updateSession() {
+            const event = {
+                type: 'session.update',
+                session: {
+                    instructions: '你是一个友好的AI助手，请用中文回应用户。',
+                    voice: 'longyingcui',
+                    modalities: ['text', 'audio'],
+                    turn_detection: {
+                        type: 'server_vad',
+                        threshold: 0.5,
+                        prefix_padding_ms: 300,
+                        silence_duration_ms: 200,
+                        create_response: true
+                    }
+                }
+            };
+            sendEvent(event);
+        }
+
+        function createTextMessage() {
+            const text = prompt('输入文本消息:', '你好，我想测试一下语音合成功能。');
+            if (!text) return;
+
+            const event = {
+                type: 'conversation.item.create',
+                item: {
+                    type: 'message',
+                    role: 'user',
+                    content: [
+                        {
+                            type: 'input_text',
+                            text: text
+                        }
+                    ]
+                }
+            };
+            sendEvent(event);
+        }
+
+        function createResponse() {
+            const event = {
+                type: 'response.create',
+                response: {
+                    modalities: ['text', 'audio'],
+                    instructions: '请用自然、友好的语调回应用户。'
+                }
+            };
+            sendEvent(event);
+        }
+
+        function cancelResponse() {
+            const event = {
+                type: 'response.cancel'
+            };
+            sendEvent(event);
+        }
+
+        async function startRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    audio: {
+                        sampleRate: 24000,
+                        channelCount: 1
+                    } 
+                });
+                
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+                
+                mediaRecorder.ondataavailable = function(event) {
+                    audioChunks.push(event.data);
+                };
+                
+                mediaRecorder.start(100); // 每100ms收集一次数据
+                isRecording = true;
+                
+                document.getElementById('recordBtn').disabled = true;
+                document.getElementById('stopBtn').disabled = false;
+                
+                log('开始录音...', 'info');
+            } catch (error) {
+                log('录音失败: ' + error.message, 'error');
+            }
+        }
+
+        function stopRecording() {
+            if (mediaRecorder && isRecording) {
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+                isRecording = false;
+                
+                document.getElementById('recordBtn').disabled = false;
+                document.getElementById('stopBtn').disabled = true;
+                
+                log('录音已停止', 'info');
+            }
+        }
+
+        function commitAudio() {
+            const event = {
+                type: 'input_audio_buffer.commit'
+            };
+            sendEvent(event);
+        }
+
+        function clearAudioBuffer() {
+            const event = {
+                type: 'input_audio_buffer.clear'
+            };
+            sendEvent(event);
+        }
+
+        function clearLogs() {
+            document.getElementById('logs').innerHTML = '';
+        }
+
+        // 页面加载完成后的初始化
+        window.onload = function() {
+            log('Realtime WebSocket 测试客户端已加载', 'info');
+            log('请输入API Key并点击连接按钮开始测试', 'info');
+        };
+
+        // 页面关闭时清理资源
+        window.onbeforeunload = function() {
+            if (ws) {
+                ws.close();
+            }
+            if (mediaRecorder && isRecording) {
+                mediaRecorder.stop();
+            }
+        };
+    </script>
+</body>
+</html> 

@@ -31,7 +31,7 @@ func SetRelayRouter(router *gin.Engine) {
 		// WebSocket 路由
 		wsRouter := relayV1Router.Group("")
 		wsRouter.Use(middleware.Distribute())
-		wsRouter.GET("/realtime", controller.WssRelay)
+		wsRouter.GET("/realtime", controller.RealtimeHandler)
 	}
 	{
 		//http router
