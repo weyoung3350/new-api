@@ -5,7 +5,7 @@
 **测试时间**: 2025-07-04 12:03:30  
 **测试模型**: wanx2.1-t2i-turbo (阿里云通义万相图像生成模型)  
 **测试环境**: New API 服务器 (localhost:3000)  
-**阿里云API密钥**: sk-5f6476ccdc0a48e591a53d86317ae88f (真实DashScope密钥)
+**阿里云API密钥**: sk-xxxx (真实DashScope密钥)
 
 ## ✅ 成功完成的任务
 
@@ -96,7 +96,7 @@
 2. **验证权限开通**
    ```bash
    # 使用直接API测试脚本验证
-   export ALI_API_KEY="sk-5f6476ccdc0a48e591a53d86317ae88f"
+   export ALI_API_KEY="sk-xxxx"
    python3 debug_ali_api.py
    ```
 
