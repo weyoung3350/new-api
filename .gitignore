@@ -11,3 +11,11 @@ web/dist
 one-api
 .DS_Store
 tiktoken_cache
+# 编译后的二进制文件
+new-api
+# 测试输出目录和文件
+test_outputs/
+test/test_outputs/
+*.mp3
+*.wav
+*.flac
