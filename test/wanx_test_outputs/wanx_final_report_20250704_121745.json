@@ -1,0 +1,127 @@
+{
+  "test_type": "wanx2.1-t2i-turbo 模型综合测试",
+  "timestamp": "2025-07-04 12:17:45",
+  "config": {
+    "base_url": "http://localhost:3000",
+    "model": "wanx2.1-t2i-turbo",
+    "timeout": 60
+  },
+  "results": {
+    "total_tests": 5,
+    "successful_tests": 5,
+    "failed_tests": 0,
+    "success_rate": 100.0,
+    "results": [
+      {
+        "success": true,
+        "response_time": 9.552608966827393,
+        "status_code": 200,
+        "model": "wanx2.1-t2i-turbo",
+        "prompt": "一只可爱的小猫咪坐在阳光下的花园里",
+        "response_data": {
+          "data": [
+            {
+              "url": "https://dashscope-result-wlcb-acdr-1.oss-cn-wulanchabu-acdr-1.aliyuncs.com/1d/e3/20250704/7557d0da/d08bde63-6601-4a90-92c8-d771104fc95d3805596508.png?Expires=1751689020&OSSAccessKeyId=LTAI5tKPD3TMqf2Lna1fASuh&Signature=BzH2V6x5yrquaOtjwiOz40cKNto%3D",
+              "b64_json": "",
+              "revised_prompt": ""
+            }
+          ],
+          "created": 1751602612
+        },
+        "image_urls": [
+          "https://dashscope-result-wlcb-acdr-1.oss-cn-wulanchabu-acdr-1.aliyuncs.com/1d/e3/20250704/7557d0da/d08bde63-6601-4a90-92c8-d771104fc95d3805596508.png?Expires=1751689020&OSSAccessKeyId=LTAI5tKPD3TMqf2Lna1fASuh&Signature=BzH2V6x5yrquaOtjwiOz40cKNto%3D"
+        ],
+        "revised_prompt": ""
+      },
+      {
+        "success": true,
+        "response_time": 9.500278949737549,
+        "status_code": 200,
+        "model": "wanx2.1-t2i-turbo",
+        "prompt": "现代城市夜景，霓虹灯闪烁，高楼大厦林立",
+        "response_data": {
+          "data": [
+            {
+              "url": "https://dashscope-result-wlcb-acdr-1.oss-cn-wulanchabu-acdr-1.aliyuncs.com/1d/e0/20250704/7557d0da/6891067c-255d-4b23-8ad6-dd6dc931540073175067.png?Expires=1751689031&OSSAccessKeyId=LTAI5tKPD3TMqf2Lna1fASuh&Signature=%2FU%2FNNNLQXbQlC%2F8iE57pDgdeWzQ%3D",
+              "b64_json": "",
+              "revised_prompt": ""
+            }
+          ],
+          "created": 1751602623
+        },
+        "image_urls": [
+          "https://dashscope-result-wlcb-acdr-1.oss-cn-wulanchabu-acdr-1.aliyuncs.com/1d/e0/20250704/7557d0da/6891067c-255d-4b23-8ad6-dd6dc931540073175067.png?Expires=1751689031&OSSAccessKeyId=LTAI5tKPD3TMqf2Lna1fASuh&Signature=%2FU%2FNNNLQXbQlC%2F8iE57pDgdeWzQ%3D"
+        ],
+        "revised_prompt": ""
+      },
+      {
+        "success": true,
+        "response_time": 9.528024911880493,
+        "status_code": 200,
+        "model": "wanx2.1-t2i-turbo",
+        "prompt": "古代中国山水画风格，山峦叠嶂，云雾缭绕",
+        "response_data": {
+          "data": [
+            {
+              "url": "https://dashscope-result-wlcb-acdr-1.oss-cn-wulanchabu-acdr-1.aliyuncs.com/1d/18/20250704/7557d0da/8b37705c-0701-4110-8c01-803ac9dfaf4f1658264341.png?Expires=1751689042&OSSAccessKeyId=LTAI5tKPD3TMqf2Lna1fASuh&Signature=ca3S3x8EwXbTnwUH0dxJMp%2BCiLY%3D",
+              "b64_json": "",
+              "revised_prompt": ""
+            }
+          ],
+          "created": 1751602633
+        },
+        "image_urls": [
+          "https://dashscope-result-wlcb-acdr-1.oss-cn-wulanchabu-acdr-1.aliyuncs.com/1d/18/20250704/7557d0da/8b37705c-0701-4110-8c01-803ac9dfaf4f1658264341.png?Expires=1751689042&OSSAccessKeyId=LTAI5tKPD3TMqf2Lna1fASuh&Signature=ca3S3x8EwXbTnwUH0dxJMp%2BCiLY%3D"
+        ],
+        "revised_prompt": ""
+      },
+      {
+        "success": true,
+        "response_time": 9.539282083511353,
+        "status_code": 200,
+        "model": "wanx2.1-t2i-turbo",
+        "prompt": "科幻未来世界，飞行汽车在空中穿梭",
+        "response_data": {
+          "data": [
+            {
+              "url": "https://dashscope-result-wlcb-acdr-1.oss-cn-wulanchabu-acdr-1.aliyuncs.com/1d/dc/20250704/7557d0da/79e9c74e-27df-40ad-9485-215dbec51eda38524378.png?Expires=1751689053&OSSAccessKeyId=LTAI5tKPD3TMqf2Lna1fASuh&Signature=n65mm1mFShWBHXPfeW6bJNuw4bw%3D",
+              "b64_json": "",
+              "revised_prompt": ""
+            }
+          ],
+          "created": 1751602644
+        },
+        "image_urls": [
+          "https://dashscope-result-wlcb-acdr-1.oss-cn-wulanchabu-acdr-1.aliyuncs.com/1d/dc/20250704/7557d0da/79e9c74e-27df-40ad-9485-215dbec51eda38524378.png?Expires=1751689053&OSSAccessKeyId=LTAI5tKPD3TMqf2Lna1fASuh&Signature=n65mm1mFShWBHXPfeW6bJNuw4bw%3D"
+        ],
+        "revised_prompt": ""
+      },
+      {
+        "success": true,
+        "response_time": 9.532604932785034,
+        "status_code": 200,
+        "model": "wanx2.1-t2i-turbo",
+        "prompt": "温馨的咖啡厅内部，暖黄色灯光，书架和植物",
+        "response_data": {
+          "data": [
+            {
+              "url": "https://dashscope-result-wlcb-acdr-1.oss-cn-wulanchabu-acdr-1.aliyuncs.com/1d/44/20250704/7557d0da/69988d78-db51-418a-a17d-5835bb8521c4977627290.png?Expires=1751689063&OSSAccessKeyId=LTAI5tKPD3TMqf2Lna1fASuh&Signature=h1FT42vJAMtql%2BA6yNMIN6bwXcQ%3D",
+              "b64_json": "",
+              "revised_prompt": ""
+            }
+          ],
+          "created": 1751602654
+        },
+        "image_urls": [
+          "https://dashscope-result-wlcb-acdr-1.oss-cn-wulanchabu-acdr-1.aliyuncs.com/1d/44/20250704/7557d0da/69988d78-db51-418a-a17d-5835bb8521c4977627290.png?Expires=1751689063&OSSAccessKeyId=LTAI5tKPD3TMqf2Lna1fASuh&Signature=h1FT42vJAMtql%2BA6yNMIN6bwXcQ%3D"
+        ],
+        "revised_prompt": ""
+      }
+    ]
+  },
+  "summary": {
+    "total_prompts": 5,
+    "success_rate": 100.0,
+    "average_response_time": 9.530559968948364
+  }
+}

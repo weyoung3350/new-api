@@ -59,6 +59,10 @@ func (a *Adaptor) SetupRequestHeader(c *gin.Context, req *http.Header, info *rel
 	if info.IsStream {
 		req.Set("X-DashScope-SSE", "enable")
 	}
+	// 为图像生成请求添加异步头部
+	if info.RelayMode == constant.RelayModeImagesGenerations {
+		req.Set("X-DashScope-Async", "enable")
+	}
 	if c.GetString("plugin") != "" {
 		req.Set("X-DashScope-Plugin", c.GetString("plugin"))
 	}

@@ -1,0 +1,21 @@
+{
+  "success": true,
+  "response_time": 9.552608966827393,
+  "status_code": 200,
+  "model": "wanx2.1-t2i-turbo",
+  "prompt": "一只可爱的小猫咪坐在阳光下的花园里",
+  "response_data": {
+    "data": [
+      {
+        "url": "https://dashscope-result-wlcb-acdr-1.oss-cn-wulanchabu-acdr-1.aliyuncs.com/1d/e3/20250704/7557d0da/d08bde63-6601-4a90-92c8-d771104fc95d3805596508.png?Expires=1751689020&OSSAccessKeyId=LTAI5tKPD3TMqf2Lna1fASuh&Signature=BzH2V6x5yrquaOtjwiOz40cKNto%3D",
+        "b64_json": "",
+        "revised_prompt": ""
+      }
+    ],
+    "created": 1751602612
+  },
+  "image_urls": [
+    "https://dashscope-result-wlcb-acdr-1.oss-cn-wulanchabu-acdr-1.aliyuncs.com/1d/e3/20250704/7557d0da/d08bde63-6601-4a90-92c8-d771104fc95d3805596508.png?Expires=1751689020&OSSAccessKeyId=LTAI5tKPD3TMqf2Lna1fASuh&Signature=BzH2V6x5yrquaOtjwiOz40cKNto%3D"
+  ],
+  "revised_prompt": ""
+}

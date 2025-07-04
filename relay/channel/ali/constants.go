@@ -12,6 +12,7 @@ var ModelList = []string{
 	"cosyvoice-v2",
 	"paraformer-realtime-8k-v2",
 	"gte-rerank-v2",
+	"wanx2.1-t2i-turbo",
 }
 
 var ChannelName = "ali"

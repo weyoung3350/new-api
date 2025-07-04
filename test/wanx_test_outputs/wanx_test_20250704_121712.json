@@ -1,0 +1,21 @@
+{
+  "success": true,
+  "response_time": 9.500278949737549,
+  "status_code": 200,
+  "model": "wanx2.1-t2i-turbo",
+  "prompt": "现代城市夜景，霓虹灯闪烁，高楼大厦林立",
+  "response_data": {
+    "data": [
+      {
+        "url": "https://dashscope-result-wlcb-acdr-1.oss-cn-wulanchabu-acdr-1.aliyuncs.com/1d/e0/20250704/7557d0da/6891067c-255d-4b23-8ad6-dd6dc931540073175067.png?Expires=1751689031&OSSAccessKeyId=LTAI5tKPD3TMqf2Lna1fASuh&Signature=%2FU%2FNNNLQXbQlC%2F8iE57pDgdeWzQ%3D",
+        "b64_json": "",
+        "revised_prompt": ""
+      }
+    ],
+    "created": 1751602623
+  },
+  "image_urls": [
+    "https://dashscope-result-wlcb-acdr-1.oss-cn-wulanchabu-acdr-1.aliyuncs.com/1d/e0/20250704/7557d0da/6891067c-255d-4b23-8ad6-dd6dc931540073175067.png?Expires=1751689031&OSSAccessKeyId=LTAI5tKPD3TMqf2Lna1fASuh&Signature=%2FU%2FNNNLQXbQlC%2F8iE57pDgdeWzQ%3D"
+  ],
+  "revised_prompt": ""
+}

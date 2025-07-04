@@ -1,0 +1,52 @@
+{
+  "test_type": "wanx2.1-t2i-turbo 模型综合测试",
+  "timestamp": "2025-07-04 12:13:59",
+  "config": {
+    "base_url": "http://localhost:3000",
+    "model": "wanx2.1-t2i-turbo",
+    "timeout": 60
+  },
+  "results": {
+    "total_tests": 5,
+    "successful_tests": 0,
+    "failed_tests": 5,
+    "success_rate": 0.0,
+    "results": [
+      {
+        "success": false,
+        "error": "Extra data: line 1 column 336 (char 335)",
+        "model": "wanx2.1-t2i-turbo",
+        "prompt": "一只可爱的小猫咪坐在阳光下的花园里"
+      },
+      {
+        "success": false,
+        "error": "Extra data: line 1 column 340 (char 339)",
+        "model": "wanx2.1-t2i-turbo",
+        "prompt": "现代城市夜景，霓虹灯闪烁，高楼大厦林立"
+      },
+      {
+        "success": false,
+        "error": "Extra data: line 1 column 338 (char 337)",
+        "model": "wanx2.1-t2i-turbo",
+        "prompt": "古代中国山水画风格，山峦叠嶂，云雾缭绕"
+      },
+      {
+        "success": false,
+        "error": "Extra data: line 1 column 336 (char 335)",
+        "model": "wanx2.1-t2i-turbo",
+        "prompt": "科幻未来世界，飞行汽车在空中穿梭"
+      },
+      {
+        "success": false,
+        "error": "Extra data: line 1 column 337 (char 336)",
+        "model": "wanx2.1-t2i-turbo",
+        "prompt": "温馨的咖啡厅内部，暖黄色灯光，书架和植物"
+      }
+    ]
+  },
+  "summary": {
+    "total_prompts": 5,
+    "success_rate": 0.0,
+    "average_response_time": 0.0
+  }
+}

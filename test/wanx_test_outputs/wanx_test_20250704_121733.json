@@ -1,0 +1,21 @@
+{
+  "success": true,
+  "response_time": 9.539282083511353,
+  "status_code": 200,
+  "model": "wanx2.1-t2i-turbo",
+  "prompt": "科幻未来世界，飞行汽车在空中穿梭",
+  "response_data": {
+    "data": [
+      {
+        "url": "https://dashscope-result-wlcb-acdr-1.oss-cn-wulanchabu-acdr-1.aliyuncs.com/1d/dc/20250704/7557d0da/79e9c74e-27df-40ad-9485-215dbec51eda38524378.png?Expires=1751689053&OSSAccessKeyId=LTAI5tKPD3TMqf2Lna1fASuh&Signature=n65mm1mFShWBHXPfeW6bJNuw4bw%3D",
+        "b64_json": "",
+        "revised_prompt": ""
+      }
+    ],
+    "created": 1751602644
+  },
+  "image_urls": [
+    "https://dashscope-result-wlcb-acdr-1.oss-cn-wulanchabu-acdr-1.aliyuncs.com/1d/dc/20250704/7557d0da/79e9c74e-27df-40ad-9485-215dbec51eda38524378.png?Expires=1751689053&OSSAccessKeyId=LTAI5tKPD3TMqf2Lna1fASuh&Signature=n65mm1mFShWBHXPfeW6bJNuw4bw%3D"
+  ],
+  "revised_prompt": ""
+}

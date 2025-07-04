@@ -1,0 +1,92 @@
+{
+  "test_type": "wanx2.1-t2i-turbo 模型综合测试",
+  "timestamp": "2025-07-04 11:50:31",
+  "config": {
+    "base_url": "http://localhost:3000",
+    "model": "wanx2.1-t2i-turbo",
+    "timeout": 60
+  },
+  "results": {
+    "total_tests": 5,
+    "successful_tests": 0,
+    "failed_tests": 5,
+    "success_rate": 0.0,
+    "results": [
+      {
+        "success": false,
+        "response_time": 0.0011820793151855469,
+        "status_code": 503,
+        "model": "wanx2.1-t2i-turbo",
+        "prompt": "一只可爱的小猫咪坐在阳光下的花园里",
+        "error": "{\"error\":{\"message\":\"当前分组 default 下对于模型 wanx2.1-t2i-turbo 无可用渠道 (request id: 202507041150262120470003d4M4YrK)\",\"type\":\"new_api_error\"}}",
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8",
+          "X-Oneapi-Request-Id": "202507041150262120470003d4M4YrK",
+          "Date": "Fri, 04 Jul 2025 03:50:26 GMT",
+          "Content-Length": "163"
+        }
+      },
+      {
+        "success": false,
+        "response_time": 0.0035178661346435547,
+        "status_code": 503,
+        "model": "wanx2.1-t2i-turbo",
+        "prompt": "现代城市夜景，霓虹灯闪烁，高楼大厦林立",
+        "error": "{\"error\":{\"message\":\"当前分组 default 下对于模型 wanx2.1-t2i-turbo 无可用渠道 (request id: 20250704115027220205000MrsehsYh)\",\"type\":\"new_api_error\"}}",
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8",
+          "X-Oneapi-Request-Id": "20250704115027220205000MrsehsYh",
+          "Date": "Fri, 04 Jul 2025 03:50:27 GMT",
+          "Content-Length": "163"
+        }
+      },
+      {
+        "success": false,
+        "response_time": 0.0026552677154541016,
+        "status_code": 503,
+        "model": "wanx2.1-t2i-turbo",
+        "prompt": "古代中国山水画风格，山峦叠嶂，云雾缭绕",
+        "error": "{\"error\":{\"message\":\"当前分组 default 下对于模型 wanx2.1-t2i-turbo 无可用渠道 (request id: 20250704115028224389000J6qQKSDH)\",\"type\":\"new_api_error\"}}",
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8",
+          "X-Oneapi-Request-Id": "20250704115028224389000J6qQKSDH",
+          "Date": "Fri, 04 Jul 2025 03:50:28 GMT",
+          "Content-Length": "163"
+        }
+      },
+      {
+        "success": false,
+        "response_time": 0.0030260086059570312,
+        "status_code": 503,
+        "model": "wanx2.1-t2i-turbo",
+        "prompt": "科幻未来世界，飞行汽车在空中穿梭",
+        "error": "{\"error\":{\"message\":\"当前分组 default 下对于模型 wanx2.1-t2i-turbo 无可用渠道 (request id: 20250704115029228556000NtyQu3hT)\",\"type\":\"new_api_error\"}}",
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8",
+          "X-Oneapi-Request-Id": "20250704115029228556000NtyQu3hT",
+          "Date": "Fri, 04 Jul 2025 03:50:29 GMT",
+          "Content-Length": "163"
+        }
+      },
+      {
+        "success": false,
+        "response_time": 0.0019390583038330078,
+        "status_code": 503,
+        "model": "wanx2.1-t2i-turbo",
+        "prompt": "温馨的咖啡厅内部，暖黄色灯光，书架和植物",
+        "error": "{\"error\":{\"message\":\"当前分组 default 下对于模型 wanx2.1-t2i-turbo 无可用渠道 (request id: 20250704115030236576000A2vcZhzW)\",\"type\":\"new_api_error\"}}",
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8",
+          "X-Oneapi-Request-Id": "20250704115030236576000A2vcZhzW",
+          "Date": "Fri, 04 Jul 2025 03:50:30 GMT",
+          "Content-Length": "163"
+        }
+      }
+    ]
+  },
+  "summary": {
+    "total_prompts": 5,
+    "success_rate": 0.0,
+    "average_response_time": 0.0
+  }
+}

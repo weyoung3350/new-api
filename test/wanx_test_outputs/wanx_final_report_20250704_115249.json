@@ -1,0 +1,92 @@
+{
+  "test_type": "wanx2.1-t2i-turbo 模型综合测试",
+  "timestamp": "2025-07-04 11:52:49",
+  "config": {
+    "base_url": "http://localhost:3000",
+    "model": "wanx2.1-t2i-turbo",
+    "timeout": 60
+  },
+  "results": {
+    "total_tests": 5,
+    "successful_tests": 0,
+    "failed_tests": 5,
+    "success_rate": 0.0,
+    "results": [
+      {
+        "success": false,
+        "response_time": 0.17011284828186035,
+        "status_code": 403,
+        "model": "wanx2.1-t2i-turbo",
+        "prompt": "一只可爱的小猫咪坐在阳光下的花园里",
+        "error": "{\"error\":{\"message\":\"current user api does not support synchronous calls (request id: 20250704115243599882000RCx6mjcF)\",\"type\":\"upstream_error\",\"param\":\"403\",\"code\":\"bad_response_status_code\"}}",
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8",
+          "X-Oneapi-Request-Id": "20250704115243599882000RCx6mjcF",
+          "Date": "Fri, 04 Jul 2025 03:52:43 GMT",
+          "Content-Length": "193"
+        }
+      },
+      {
+        "success": false,
+        "response_time": 0.15636801719665527,
+        "status_code": 403,
+        "model": "wanx2.1-t2i-turbo",
+        "prompt": "现代城市夜景，霓虹灯闪烁，高楼大厦林立",
+        "error": "{\"error\":{\"message\":\"current user api does not support synchronous calls (request id: 20250704115244775771000gA7p2OsG)\",\"type\":\"upstream_error\",\"param\":\"403\",\"code\":\"bad_response_status_code\"}}",
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8",
+          "X-Oneapi-Request-Id": "20250704115244775771000gA7p2OsG",
+          "Date": "Fri, 04 Jul 2025 03:52:44 GMT",
+          "Content-Length": "193"
+        }
+      },
+      {
+        "success": false,
+        "response_time": 0.1423020362854004,
+        "status_code": 403,
+        "model": "wanx2.1-t2i-turbo",
+        "prompt": "古代中国山水画风格，山峦叠嶂，云雾缭绕",
+        "error": "{\"error\":{\"message\":\"current user api does not support synchronous calls (request id: 20250704115245936863000SmpKDJpc)\",\"type\":\"upstream_error\",\"param\":\"403\",\"code\":\"bad_response_status_code\"}}",
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8",
+          "X-Oneapi-Request-Id": "20250704115245936863000SmpKDJpc",
+          "Date": "Fri, 04 Jul 2025 03:52:46 GMT",
+          "Content-Length": "193"
+        }
+      },
+      {
+        "success": false,
+        "response_time": 0.14585018157958984,
+        "status_code": 403,
+        "model": "wanx2.1-t2i-turbo",
+        "prompt": "科幻未来世界，飞行汽车在空中穿梭",
+        "error": "{\"error\":{\"message\":\"current user api does not support synchronous calls (request id: 2025070411524785202000Ti3vAvwY)\",\"type\":\"upstream_error\",\"param\":\"403\",\"code\":\"bad_response_status_code\"}}",
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8",
+          "X-Oneapi-Request-Id": "2025070411524785202000Ti3vAvwY",
+          "Date": "Fri, 04 Jul 2025 03:52:47 GMT",
+          "Content-Length": "192"
+        }
+      },
+      {
+        "success": false,
+        "response_time": 0.23595213890075684,
+        "status_code": 403,
+        "model": "wanx2.1-t2i-turbo",
+        "prompt": "温馨的咖啡厅内部，暖黄色灯光，书架和植物",
+        "error": "{\"error\":{\"message\":\"current user api does not support synchronous calls (request id: 20250704115248234748000gG55Kgtw)\",\"type\":\"upstream_error\",\"param\":\"403\",\"code\":\"bad_response_status_code\"}}",
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8",
+          "X-Oneapi-Request-Id": "20250704115248234748000gG55Kgtw",
+          "Date": "Fri, 04 Jul 2025 03:52:48 GMT",
+          "Content-Length": "193"
+        }
+      }
+    ]
+  },
+  "summary": {
+    "total_prompts": 5,
+    "success_rate": 0.0,
+    "average_response_time": 0.0
+  }
+}

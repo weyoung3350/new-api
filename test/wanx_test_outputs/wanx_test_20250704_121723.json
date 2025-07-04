@@ -1,0 +1,21 @@
+{
+  "success": true,
+  "response_time": 9.528024911880493,
+  "status_code": 200,
+  "model": "wanx2.1-t2i-turbo",
+  "prompt": "古代中国山水画风格，山峦叠嶂，云雾缭绕",
+  "response_data": {
+    "data": [
+      {
+        "url": "https://dashscope-result-wlcb-acdr-1.oss-cn-wulanchabu-acdr-1.aliyuncs.com/1d/18/20250704/7557d0da/8b37705c-0701-4110-8c01-803ac9dfaf4f1658264341.png?Expires=1751689042&OSSAccessKeyId=LTAI5tKPD3TMqf2Lna1fASuh&Signature=ca3S3x8EwXbTnwUH0dxJMp%2BCiLY%3D",
+        "b64_json": "",
+        "revised_prompt": ""
+      }
+    ],
+    "created": 1751602633
+  },
+  "image_urls": [
+    "https://dashscope-result-wlcb-acdr-1.oss-cn-wulanchabu-acdr-1.aliyuncs.com/1d/18/20250704/7557d0da/8b37705c-0701-4110-8c01-803ac9dfaf4f1658264341.png?Expires=1751689042&OSSAccessKeyId=LTAI5tKPD3TMqf2Lna1fASuh&Signature=ca3S3x8EwXbTnwUH0dxJMp%2BCiLY%3D"
+  ],
+  "revised_prompt": ""
+}

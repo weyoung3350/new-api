@@ -148,6 +148,10 @@ func aliImageHandler(c *gin.Context, resp *http.Response, info *relaycommon.Rela
 		return service.OpenAIErrorWrapper(err, "ali_async_task_wait_failed", http.StatusInternalServerError), nil
 	}
 
+	if aliResponse == nil {
+		return service.OpenAIErrorWrapper(errors.New("async task response is nil"), "ali_async_task_response_nil", http.StatusInternalServerError), nil
+	}
+
 	if aliResponse.Output.TaskStatus != "SUCCEEDED" {
 		return &dto.OpenAIErrorWithStatusCode{
 			Error: dto.OpenAIError{
@@ -168,5 +172,17 @@ func aliImageHandler(c *gin.Context, resp *http.Response, info *relaycommon.Rela
 	c.Writer.Header().Set("Content-Type", "application/json")
 	c.Writer.WriteHeader(resp.StatusCode)
 	_, err = c.Writer.Write(jsonResponse)
-	return nil, nil
+	if err != nil {
+		return service.OpenAIErrorWrapper(err, "write_response_body_failed", http.StatusInternalServerError), nil
+	}
+	
+	// 返回使用情况信息
+	usage := &dto.Usage{
+		TotalTokens: 1, // 图像生成通常按图片数量计费
+	}
+	if aliResponse.Usage.TotalTokens > 0 {
+		usage.TotalTokens = aliResponse.Usage.TotalTokens
+	}
+	
+	return nil, usage
 }
