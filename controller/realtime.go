@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"encoding/base64"
 	"fmt"
 	"log"
 	"net/http"
@@ -381,15 +382,23 @@ func (rc *RealtimeConnection) updateTools(tools []interface{}) {
 
 // 处理音频缓冲区追加
 func (rc *RealtimeConnection) handleAudioBufferAppend(event map[string]interface{}) error {
-	_, ok := event["audio"].(string)
+	audioBase64, ok := event["audio"].(string)
 	if !ok {
 		return fmt.Errorf("无效的音频数据")
 	}
 
-	// TODO: 解码base64音频数据并添加到缓冲区
+	// 解码base64音频数据并添加到缓冲区
 	rc.audioBufferMu.Lock()
-	// 这里应该解码base64并添加到音频缓冲区
-	rc.audioBufferMu.Unlock()
+	defer rc.audioBufferMu.Unlock()
+
+	// 解码base64音频数据
+	audioData, err := base64.StdEncoding.DecodeString(audioBase64)
+	if err != nil {
+		return fmt.Errorf("音频数据解码失败: %v", err)
+	}
+
+	// 添加到音频缓冲区
+	rc.audioBuffer = append(rc.audioBuffer, audioData...)
 
 	return nil
 }
@@ -409,7 +418,7 @@ func (rc *RealtimeConnection) handleAudioBufferCommit(event map[string]interface
 		ID:     itemID,
 		Object: "realtime.item",
 		Type:   "message",
-		Status: "completed",
+		Status: "in_progress",
 		Role:   "user",
 		Content: []ContentPart{
 			{
@@ -432,6 +441,11 @@ func (rc *RealtimeConnection) handleAudioBufferCommit(event map[string]interface
 	rc.sendServerEvent("conversation.item.created", map[string]interface{}{
 		"item": item,
 	})
+
+	// 如果是Paraformer模型，启动语音识别处理
+	if rc.session.Model == "paraformer-realtime-8k-v2" {
+		go rc.processParaformerTranscription(itemID)
+	}
 
 	// 清空音频缓冲区
 	rc.audioBuffer = rc.audioBuffer[:0]
@@ -666,18 +680,77 @@ func (rc *RealtimeConnection) sendErrorEvent(code, message, eventID string) erro
 	})
 }
 
+// 处理Paraformer语音识别转录
+func (rc *RealtimeConnection) processParaformerTranscription(itemID string) {
+	// 模拟语音识别处理延迟
+	time.Sleep(500 * time.Millisecond)
+
+	// 模拟语音识别结果（实际应该调用阿里云Paraformer API）
+	transcript := "这是一段测试语音识别的内容"
+
+	// 发送转录完成事件
+	rc.sendServerEvent("conversation.item.input_audio_transcription.completed", map[string]interface{}{
+		"item_id":       itemID,
+		"content_index": 0,
+		"transcript":    transcript,
+	})
+
+	// 更新对话项目状态
+	rc.conversation.mu.Lock()
+	for i := range rc.conversation.Items {
+		if rc.conversation.Items[i].ID == itemID {
+			rc.conversation.Items[i].Status = "completed"
+			// 添加转录内容
+			rc.conversation.Items[i].Content = append(rc.conversation.Items[i].Content, ContentPart{
+				Type:       "text",
+				Text:       transcript,
+				Transcript: transcript,
+			})
+			break
+		}
+	}
+	rc.conversation.mu.Unlock()
+
+	// 发送项目更新事件
+	rc.sendServerEvent("conversation.item.updated", map[string]interface{}{
+		"item_id": itemID,
+		"item": map[string]interface{}{
+			"id":     itemID,
+			"object": "realtime.item",
+			"type":   "message",
+			"status": "completed",
+			"role":   "user",
+			"content": []interface{}{
+				map[string]interface{}{
+					"type":       "input_audio",
+					"audio":      "",
+					"transcript": transcript,
+				},
+				map[string]interface{}{
+					"type": "text",
+					"text": transcript,
+				},
+			},
+		},
+	})
+}
+
 // 检查模型是否支持实时API
 func isRealtimeModelSupported(model string) bool {
 	supportedModels := []string{
 		"cosyvoice-v2",
+		"paraformer-realtime-8k-v2", // 添加Paraformer语音识别支持
 		"gpt-4o-realtime-preview",
 		"gpt-4o-mini-realtime-preview",
 	}
 
+	log.Printf("检查模型支持: %s", model)
 	for _, supported := range supportedModels {
 		if model == supported {
+			log.Printf("模型 %s 受支持", model)
 			return true
 		}
 	}
+	log.Printf("模型 %s 不受支持", model)
 	return false
 }

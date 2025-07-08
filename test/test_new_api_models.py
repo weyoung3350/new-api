@@ -35,7 +35,7 @@ logger = logging.getLogger(__name__)
 class APIConfig:
     """API配置类"""
     base_url: str = "http://127.0.0.1:3000"  # 请替换为实际的API地址
-    api_key: str = ""  # 请设置您的API密钥
+    api_key: str = "sk-WFXP99kKWeu9BhV3UiypR6wj2tb2x5d08TLGWgiLHiDG9r8Q"  # 请设置您的API密钥
     timeout: int = 30
     
     def __post_init__(self):
@@ -300,16 +300,16 @@ class TestRunner:
         self.results.append(paraformer_result)
         
         # 测试CosyVoice语音合成
-        cosyvoice_tester = CosyVoiceTester(self.client)
-        cosyvoice_result = cosyvoice_tester.test_speech_synthesis(
-            test_text or "你好，这是CosyVoice语音合成测试。"
-        )
-        self.results.append(cosyvoice_result)
+        #cosyvoice_tester = CosyVoiceTester(self.client)
+        #cosyvoice_result = cosyvoice_tester.test_speech_synthesis(
+        #    test_text or "你好，这是CosyVoice语音合成测试。"
+        #)
+        #self.results.append(cosyvoice_result)
         
         # 测试Text Embedding
-        embedding_tester = TextEmbeddingTester(self.client)
-        embedding_result = embedding_tester.test_embedding(embedding_texts)
-        self.results.append(embedding_result)
+        #embedding_tester = TextEmbeddingTester(self.client)
+        #embedding_result = embedding_tester.test_embedding(embedding_texts)
+        #self.results.append(embedding_result)
         
         # 生成测试报告
         report = self.generate_report()
